@@ -1,0 +1,10 @@
+{% extends 'dashboard_base.html' %}
+{% block content %}
+<div class="dashboard-page">
+    <h1>Admin Control Panel</h1>
+    <p>Welcome, {{ full_name }}. You are logged in as a Superuser.</p>
+    <div class="stat-card">
+        <a href="/admin/" style="color: blue; text-decoration: underline;">Go to Django Database Admin →</a>
+    </div>
+</div>
+{% endblock %}

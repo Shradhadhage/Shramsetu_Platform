@@ -1,0 +1,104 @@
+{% extends 'services/dashboard_base.html' %}
+
+{% block content %}
+<div class="messages-page" style="padding: 20px;">
+    <h2 style="margin-bottom: 20px; color: #1e293b; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.2em;">📥</span> My Messages & Notifications
+    </h2>
+    
+    <div class="dashboard-section" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        {% for job in notifications %}
+            
+            {# --- PENDING SECTION --- #}
+            {% if job.status == 'pending' %}
+                <div class="notification-card" style="border: 2px solid #3b82f6; border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; background-color: #f0f7ff;">
+                    <div style="flex: 1;">
+                        <h4 style="color: #1e40af; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="background: #3b82f6; color: white; border-radius: 4px; padding: 2px 5px; font-size: 0.8em;">🔔</span>
+                            New Job Request from {{ job.customer.username|title }}
+                        </h4>
+                        <p style="margin: 5px 0;"><strong>Job:</strong> {{ job.title }}</p>
+                        <p style="margin: 5px 0;"><strong>📍 Location:</strong> {{ job.customer.profile.location|default:"Not Provided" }}</p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <form method="POST" action="{% url 'update_job_status' job.id 'accepted' %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold;">Accept</button>
+                        </form>
+                        <form method="POST" action="{% url 'update_job_status' job.id 'declined' %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold;">Decline</button>
+                        </form>
+                    </div>
+                </div>
+
+            {# --- ACCEPTED SECTION --- #}
+            {% elif job.status == 'accepted' %}
+                <div class="notification-card" style="border: 2px solid #28a745; border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="flex: 1;">
+                        <h4 style="color: #155724; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="background: #28a745; color: white; border-radius: 4px; padding: 2px 5px; font-size: 0.8em;">✅</span>
+                            {% if request.user == job.worker %}Job Confirmed!{% else %}{{ job.worker.username|title }} Accepted!{% endif %}
+                        </h4>
+                        <p style="margin: 5px 0;"><strong>Job:</strong> {{ job.title }}</p>
+                        
+                        {% if request.user == job.worker %}
+                            <p style="margin: 5px 0;"><strong>Customer:</strong> {{ job.customer.username|title }}</p>
+                            <p style="margin: 5px 0;"><strong>📍 Address:</strong> {{ job.customer.profile.location|default:"Not Provided" }}</p>
+                        {% else %}
+                            <p style="margin: 5px 0;"><strong>Worker:</strong> {{ job.worker.username|title }}</p>
+                            <p style="margin: 5px 0;"><strong>📍 Address:</strong> {{ job.worker.profile.location|default:"Not Provided" }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div style="text-align: right; min-width: 180px;">
+                        {% if request.user == job.worker %}
+                            <p style="margin: 0; font-size: 0.9em;"><strong>Email:</strong> {{ job.customer.email }}</p>
+                            <p style="margin: 5px 0; color: #007bff; font-weight: bold;">📞 Phone: {{ job.customer.profile.phone|default:"None" }}</p>
+                            {% if job.customer.profile.phone %}
+                                <a href="https://wa.me/{{ job.customer.profile.phone }}" target="_blank" style="font-size: 0.8em; color: #25D366; text-decoration: none;">💬 WhatsApp Customer</a>
+                            {% endif %}
+                        {% else %}
+                            <p style="margin: 0; font-size: 0.9em;"><strong>Email:</strong> {{ job.worker.email }}</p>
+                            <p style="margin: 5px 0; color: #007bff; font-weight: bold;">📞 Phone: {{ job.worker.profile.phone|default:"None" }}</p>
+                            {% if job.worker.profile.phone %}
+                                <a href="https://wa.me/{{ job.worker.profile.phone }}" target="_blank" style="font-size: 0.8em; color: #25D366; text-decoration: none;">💬 WhatsApp Worker</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+            {# --- DECLINED / REJECTED SECTION --- #}
+            {% elif job.status == 'declined' or job.status == 'rejected' %}
+                <div class="notification-card" style="border: 2px solid #dc3545; border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-start; background-color: #fff8f8;">
+                    <div style="flex: 1;">
+                        <h4 style="color: #b02a37; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="background: #dc3545; color: white; border-radius: 4px; padding: 2px 5px; font-size: 0.8em;">❌</span>
+                            Request Declined
+                        </h4>
+                        <p style="margin: 5px 0;"><strong>Job Title:</strong> {{ job.title }}</p>
+                        
+                        {% if request.user == job.customer %}
+                            <p style="margin: 5px 0; color: #6c757d;">
+                                <strong>Worker:</strong> {{ job.worker.username|title }} is unavailable for this task.
+                            </p>
+                        {% else %}
+                            <p style="margin: 5px 0; color: #6c757d;">
+                                You have declined the request from <strong>{{ job.customer.username|title }}</strong>.
+                            </p>
+                        {% endif %}
+                        
+                        <p style="margin: 5px 0; font-size: 0.85em; color: #dc3545; font-style: italic;">Status: {{ job.status|upper }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% empty %}
+            <div style="text-align: center; padding: 30px; color: #6c757d;">
+                <p>No new notifications yet.</p>
+            </div> 
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+<div id="chatbot-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: 'Inter', sans-serif;">
+    <button onclick="toggleChat()" style="background: #2563eb; color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        💬 Help
+    </button>
+
+    <div id="chat-window" style="display: none; width: 300px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); flex-direction: column; overflow: hidden; margin-bottom: 10px;">
+        <div style="background: #2563eb; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between;">
+            <span>Shramsetu Assistant</span>
+            <button onclick="toggleChat()" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
+        </div>
+        
+        <div id="chat-messages" style="flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem;">
+            <p style="background: #f1f5f9; padding: 8px; border-radius: 8px; color: #1e293b;">Hello! How can I help you today? Try typing "hire" or "status".</p>
+        </div>
+
+        <div style="padding: 10px; border-top: 1px solid #e2e8f0; display: flex;">
+            <input type="text" id="chat-input" placeholder="Type a message..." style="flex: 1; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; outline: none;">
+            <button onclick="sendMessage()" style="background: #2563eb; color: white; border: none; padding: 8px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer;">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleChat() {
+        const window = document.getElementById('chat-window');
+        window.style.display = window.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const messageArea = document.getElementById('chat-messages');
+        const text = input.value.trim().toLowerCase();
+
+        if (text === "") return;
+
+        // User Message
+        messageArea.innerHTML += `<p style="text-align: right;"><b>You:</b> ${input.value}</p>`;
+        
+        // Simple AI Logic
+        let response = "I'm sorry, I don't understand. Can you rephrase?";
+        
+        if (text.includes("hire")) {
+            response = "To hire a worker, go to the 'Overview' tab and search for skills like 'Plumbing' or 'Painting'.";
+        } else if (text.includes("status")) {
+            response = "Check the 'Project Status Tracker' on your dashboard to see if your request was accepted.";
+        } else if (text.includes("contact")) {
+            response = "Once a worker accepts your request, their phone number and a WhatsApp link will appear in your messages.";
+        } else if (text.includes("hello") || text.includes("hi")) {
+            response = "Hi there! I'm the Shramsetu bot. Ask me about hiring workers or checking job status!";
+        }
+
+        // Bot Response
+        setTimeout(() => {
+            messageArea.innerHTML += `<p style="background: #f1f5f9; padding: 8px; border-radius: 8px; color: #1e293b;"><b>Bot:</b> ${response}</p>`;
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }, 500);
+
+        input.value = "";
+    }
+</script>

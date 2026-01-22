@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shramsetu </title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}">
+    
+    <style>
+        :root {
+            --neon-orange: #ff6b00;
+            --sidebar-navy: #0a0f1a;
+            --worker-blue: #2563eb;
+            --customer-green: #10b981;
+        }
+
+        /* --- UNIQUE ANIMATED SIDEBAR --- */
+        .sidebar {
+            background: var(--sidebar-navy) !important;
+            border-right: 1px solid rgba(255, 107, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .sidebar-brand {
+            font-family: 'Syncopate', sans-serif;
+            letter-spacing: 2px;
+            color: var(--neon-orange);
+            font-size: 1.1rem !important;
+        }
+
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 107, 0, 0.1) !important;
+            color: var(--neon-orange) !important;
+            padding-left: 30px !important;
+        }
+
+        .nav-item.active {
+            border-left: 4px solid var(--neon-orange);
+            background: rgba(255, 107, 0, 0.05);
+        }
+
+        /* --- DYNAMIC ROLE BADGE --- */
+        .role-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* Logic-based classes */
+        .badge-worker { background: var(--worker-blue); color: white; box-shadow: 0 0 10px rgba(37, 99, 235, 0.4); }
+        .badge-customer { background: var(--customer-green); color: white; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+
+        .welcome-text { font-family: 'Syncopate', sans-serif; font-size: 1rem !important; }
+
+    </style>
+</head>
+<body>
+    <div id="sidebarOverlay" class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="dashboard-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Logo" class="sidebar-logo">
+            </div>
+
+            <div class="sidebar-brand">SHRAMSETU </div>
+
+            <nav>
+                <a href="{% url 'home' %}" class="nav-item">🏠 BACK_TO_SITE</a>
+                
+                <div style="margin: 10px 0; border-top: 1px solid rgba(255,107,0,0.2);"></div>
+
+                <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    📊 OVERVIEW
+                </a>
+                
+                <a href="{% url 'messages' %}" class="nav-item {% if request.resolver_match.url_name == 'messages' %}active{% endif %}">
+                    📩 MESSAGES 
+                </a>
+
+                <a href="{% url 'settings' %}" class="nav-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                    ⚙️ SETTINGS
+                </a>
+                
+                <a href="{% url 'logout' %}" class="logout-link" style="margin-top: auto; border-top: 1px solid #ff4d0033;">🚪 logout</a>
+            </nav>
+        </aside>
+
+        <div class="main-container" id="mainContainer">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <div class="menu-btn" onclick="toggleSidebar()">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="user-meta" style="text-align: right; margin-right: 15px;">
+                        <h1 class="welcome-text">ID: {{ request.user.username|upper }}</h1>
+                        
+                        {% if user.worker_profile or profile.role == 'worker' %}
+                            <span class="role-badge badge-worker">Verified Worker</span>
+                        {% else %}
+                            <span class="role-badge badge-customer">Customer Mode</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="user-avatar" style="background: var(--neon-orange); color: white; font-weight: bold;">
+                        {{ request.user.username|slice:":1"|upper }}
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-padding">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    ...
+    {% include 'services/chatbot.html' %}
+</body>
+</html>

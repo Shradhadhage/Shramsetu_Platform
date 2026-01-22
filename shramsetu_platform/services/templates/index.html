@@ -1,0 +1,328 @@
+ {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shramsetu | Construction Services</title>
+ <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">Shramsetu</div>
+
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Services</a>
+      <a href="#">Projects</a>
+      <button class="contact-btn" onclick="openAuth()">Login</button>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="overlay"></div>
+
+    <div class="hero-content">
+      <h1>Building Your Dreams Into Reality</h1>
+      <p>
+        Professional construction labor services with over 20 years of experience
+        in residential and commercial projects.
+      </p>
+
+      <div class="hero-buttons">
+        <button class="primary-btn">Contact →</button>
+        <button class="secondary-btn">Our Services</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section class="about-section hidden">
+    <div class="about-container">
+
+      <div class="about-text">
+        <h2>About Shramsetu</h2>
+        <p>
+          We are a leading construction labor company specializing in residential
+          and commercial construction projects. With over two decades of experience,
+          we deliver quality, safety, and reliability.
+        </p>
+
+        <ul>
+          <li>✔ Licensed & Insured</li>
+          <li>✔ On-Time Delivery</li>
+          <li>✔ Quality Materials</li>
+          <li>✔ Expert Team</li>
+        </ul>
+      </div>
+
+      <div class="about-image">
+        <img src="{% static 'images/about.jpg' %}" alt="Construction">
+        
+      </div>
+
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+
+
+  <!-- ABOUT STATS SECTION -->
+<section class="about-stats">
+  <div class="stats-container">
+
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <h3>500+</h3>
+      <p>Projects Completed</p>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🏅</div>
+      <h3>20+</h3>
+      <p>Years Experience</p>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">👷</div>
+      <h3>100+</h3>
+      <p>Professional Workers</p>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">✔</div>
+      <h3>100%</h3>
+      <p>Satisfaction</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section class="services-section">
+  <div class="services-container">
+
+    <h2>Our Services</h2>
+    <p class="services-subtitle">
+      We offer a comprehensive range of construction services to meet all your building needs.
+    </p>
+
+    <div class="services-grid" id="servicesGrid"></div>
+
+  </div>
+</section>
+
+<script>
+  const services = [
+    {
+      icon: "🏢",
+      title: "Commercial Construction",
+      text: "Full-service commercial building projects including offices, retail spaces, and warehouses."
+    },
+    {
+      icon: "🏠",
+      title: "Residential Construction",
+      text: "Custom home building, additions, and major renovations for homeowners."
+    },
+    {
+      icon: "🔨",
+      title: "Renovation & Remodeling",
+      text: "Transform your existing space with our expert renovation and remodeling services."
+    },
+    {
+      icon: "🎨",
+      title: "Finishing Work",
+      text: "Professional interior and exterior finishing including painting, flooring, and trim work."
+    },
+    {
+      icon: "🧱",
+      title: "Concrete & Masonry",
+      text: "Expert concrete foundations, driveways, patios, and masonry work."
+    },
+    {
+      icon: "📋",
+      title: "Project Management",
+      text: "Comprehensive project management services to ensure timely and budget-friendly completion."
+    }
+  ];
+
+  const grid = document.getElementById("servicesGrid");
+
+  services.forEach(service => {
+    const card = document.createElement("div");
+    card.className = "service-card";
+
+    card.innerHTML = `
+      <div class="service-icon">${service.icon}</div>
+      <h3>${service.title}</h3>
+      <p>${service.text}</p>
+    `;
+
+    grid.appendChild(card);
+  });
+</script>
+<!-- PROJECTS SECTION -->
+<section class="projects-section">
+  <div class="projects-container">
+
+    <h2>Our Projects</h2>
+    <p class="projects-subtitle">
+      Take a look at some of our completed projects showcasing our quality and expertise.
+    </p>
+
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <img src="{% static 'images/proj1.avif' %}" alt="Office Complex">
+        
+        <div class="project-overlay">
+          <span class="project-tag commercial">Commercial</span>
+          <h3>Modern Office Complex</h3>
+          <p>A 5-story office building with state-of-the-art facilities</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img src="{% static 'images/proj2.jpg' %}" alt="Residential Home">
+        
+        <div class="project-overlay">
+          <span class="project-tag residential">Residential</span>
+          <h3>Luxury Residential Home</h3>
+          <p>Custom 4-bedroom family home with modern amenities</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img src="{% static 'images/proj3.webp' %}" alt="Shopping Center">
+        
+        <div class="project-overlay">
+          <span class="project-tag commercial">Commercial</span>
+          <h3>Retail Shopping Center</h3>
+          <p>Multi-tenant retail space with parking facilities</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img src="{% static 'images/proje4.webp' %}" alt="Warehouse">
+        
+        <div class="project-overlay">
+          <span class="project-tag industrial">Industrial</span>
+          <h3>Industrial Warehouse</h3>
+          <p>Large-scale warehouse facility with modern infrastructure</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- CONTACT SECTION -->
+<section class="contact">
+  <div class="contact-title">
+    <h1>Get In Touch</h1>
+    <p>Ready to start your construction project? Contact us today for a free consultation and quote.</p>
+  </div>
+
+  <div class="contact-wrapper">
+
+    <!-- LEFT FORM -->
+    <div class="contact-form">
+      <h3> Ready To Start Your Project? </h3>
+
+      <label>Full Name *</label>
+      <input type="text" placeholder="John Doe">
+
+      <label>Email Address *</label>
+      <input type="email" placeholder="john@example.com">
+
+      <label>Phone Number</label>
+      <input type="text" placeholder="+91 98765 43210">
+
+      <label>Project Details *</label>
+      <textarea rows="4" placeholder="Tell us about your project..."></textarea>
+
+      <button class="send-btn">Send Message</button>
+    </div>
+
+    <!-- RIGHT INFO -->
+    <div class="contact-info">
+      <h3>Contact Information</h3>
+
+      <div class="info-box">
+        📞 <div><b>Phone</b><br>+1 (555) 123-4567</div>
+      </div>
+
+      <div class="info-box">
+        ✉️ <div><b>Email</b><br>info@buildpro.com</div>
+      </div>
+
+      <div class="info-box">
+        📍 <div><b>Address</b><br>123 Construction Ave, Building City</div>
+      </div>
+
+      <div class="info-box">
+        ⏰ <div><b>Business Hours</b><br>Mon-Fri: 7AM-6PM</div>
+      </div>
+
+      <div class="emergency-box">
+        <h4>Need Immediate Assistance?</h4>
+        <p>For urgent matters or emergency services, please call our 24/7 hotline.</p>
+        <button class="emergency-btn">📞 Call Emergency Line</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+<div id="authModal" class="auth-overlay">
+    <div class="auth-card">
+        <span class="auth-close" onclick="closeAuth()">&times;</span>
+        
+        <div class="auth-tabs">
+            <button id="tabCustomer" class="active" onclick="switchTab('customer')">I want to Hire</button>
+            <button id="tabWorker" onclick="switchTab('worker')">I want to Work</button>
+        </div>
+
+        <form id="authForm" class="auth-form-content" method="POST" action="{% url 'auth_view' %}">
+    {% csrf_token %}
+    
+    <input type="hidden" name="action" id="formAction" value="login">
+    <input type="hidden" name="role" id="userRole" value="customer">
+
+    <h2 id="authTitle">Customer Login</h2>
+    
+    <input type="text" name="full_name" id="usernameField" placeholder="Full Name" style="display: none;">
+    
+    <input type="email" name="email" placeholder="Email Address" required>
+    
+    <div id="workerOptions" style="display: none;">
+        <select name="skill">
+            <option value="">Select Your Skill</option>
+            <option value="mason">Masonry</option>
+            <option value="carpenter">Carpentry</option>
+            <option value="plumber">Plumbing</option>
+        </select>
+    </div>
+
+    <input type="password" name="password" placeholder="Password" required>
+    <input type="password" name="confirm_password" id="confirmPasswordField" placeholder="Confirm Password" style="display: none;">
+    
+    <button type="submit" id="submitBtn" class="primary-btn">Login</button>
+    
+    <p class="auth-toggle-text">
+        <span id="toggleMsg">Don't have an account?</span> 
+        <a href="javascript:void(0)" onclick="toggleAuthMode()" id="toggleLink">Register Now</a>
+    </p>
+</form>
+
+    </div>
+</div>
+<script src="{% static 'js/script.js' %}"></script>
+
+
+
+</body>
+</html>
+
+ 

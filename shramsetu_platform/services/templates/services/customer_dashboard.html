@@ -1,0 +1,86 @@
+{% extends 'services/dashboard_base.html' %}
+
+{% block content %}
+<div class="dashboard-page" style="padding: 20px; font-family: 'Inter', sans-serif;">
+
+    <div class="tracking-section" style="margin-bottom: 40px;">
+        <h2 style="color: #1e293b; font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+            📡 Project Status Tracker
+        </h2>
+        
+        <div class="request-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+            {% for job in my_requests %}
+                <div class="status-card" style="background: white; border-radius: 10px; padding: 15px; border-left: 5px solid 
+                    {% if job.status == 'accepted' %}#10b981{% elif job.status == 'declined' %}#ef4444{% else %}#f59e0b{% endif %};
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s;">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <strong style="display: block; color: #334155;">{{ job.worker.get_full_name|default:job.worker.username }}</strong>
+                            <span style="font-size: 0.8rem; color: #64748b;">Requested: {{ job.created_at|date:"M d, g:i a" }}</span>
+                        </div>
+                        <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
+                            {% if job.status == 'accepted' %} background: #d1fae5; color: #065f46;
+                            {% elif job.status == 'declined' %} background: #fee2e2; color: #991b1b;
+                            {% else %} background: #fef3c7; color: #92400e; {% endif %}">
+                            {{ job.status }}
+                        </span>
+                    </div>
+
+                    {% if job.status == 'accepted' %}
+                        <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.9rem; color: #1e293b;">📞 {{ job.worker.profile.phone|default:"8888888888" }}</span>
+                            <a href="https://wa.me/{{ job.worker.profile.phone }}" target="_blank" 
+                               style="background: #25d366; color: white; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 600;">
+                               WhatsApp Worker
+                            </a>
+                        </div>
+                    {% elif job.status == 'declined' %}
+                        <p style="margin-top: 10px; font-size: 0.85rem; color: #ef4444; font-weight: 500;">
+                            ❌ Worker declined. Please find another professional below.
+                        </p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div style="grid-column: 1/-1; padding: 30px; background: #f8fafc; border-radius: 10px; text-align: center; color: #64748b; border: 1px dashed #cbd5e1;">
+                    No active job requests found.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 40px;">
+
+    <div class="search-container" style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px;">
+        <h2 style="margin-top: 0; color: #1e293b; font-size: 1.5rem;">🔍 Hire New Workers</h2>
+        <form method="GET" action="." style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" name="search" placeholder="Search skills (e.g. Electrician)..." value="{{ search_query }}"
+                   style="flex: 1; min-width: 250px; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px;">
+            <button type="submit" style="background: #2563eb; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                Filter
+            </button>
+        </form>
+    </div>
+
+    <div class="worker-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+        {% for worker in workers %}
+            <div class="card" style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; text-align: center; background: white; transition: 0.3s;">
+                <div style="width: 60px; height: 60px; background: #f1f5f9; color: #2563eb; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;">
+                    {{ worker.user.username|slice:":1"|upper }}
+                </div>
+                <strong style="display: block; font-size: 1.1rem; color: #1e293b;">{{ worker.user.username|title }}</strong>
+                <p style="color: #2563eb; font-weight: 600; margin: 8px 0;">⚡ {{ worker.skill|default:"General" }}</p>
+                
+                <div style="margin: 15px 0; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+                    <form action="{% url 'hire_worker' worker.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" style="width: 100%; background: #2563eb; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                            Send Hire Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'dashboard_base.html' %}
+
+{% block content %}
+    <div class="dashboard-section">
+        <h2>📩 {{ request.resolver_match.url_name|title }}</h2>
+        <p>Welcome to your inbox. Content for <strong>{{ role }}</strong> coming soon!</p>
+        
+        <div class="list-item">
+            <p>No new messages yet.</p>
+        </div>
+    </div>
+{% endblock %}

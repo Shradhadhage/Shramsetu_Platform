@@ -1,0 +1,26 @@
+{% extends 'services/dashboard_base.html' %}
+{% block content %}
+<div class="container">
+    <h2>📥 New Job Requests</h2>
+    {% for job in incoming_jobs %}
+        <div class="card" style="padding: 15px; margin-bottom: 10px; border: 1px solid #ddd;">
+            <h4>{{ job.title }}</h4>
+            <p>Customer: {{ job.customer.username }}</p>
+            
+            <div style="display: flex; gap: 10px;">
+                <form action="{% url 'accept_job' job.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Accept</button>
+                </form>
+
+                <form action="{% url 'reject_job' job.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Decline</button>
+                </form>
+            </div>
+        </div>
+    {% empty %}
+        <p>No new job requests at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}
